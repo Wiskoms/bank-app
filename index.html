@@ -2,45 +2,50 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Мій Банк</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bank Debug Mode</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        #status { color: #555; font-family: sans-serif; position: absolute; }
+        body { background: #000; color: #0f0; padding: 20px; font-family: monospace; font-size: 12px; }
+        #log { white-space: pre-wrap; }
     </style>
 </head>
 <body>
-    <div id="status">Завантаження банку...</div>
-    <canvas id="canvas"></canvas>
+    <div id="log">Ініціалізація системи...</div>
+    <canvas id="canvas" style="display:none;"></canvas>
 
-    <script type="text/javascript">
-        async function runApp() {
-            const status = document.getElementById('status');
+    <script>
+        const logElement = document.getElementById('log');
+        function print(text) { logElement.innerText += "\n" + text; }
+
+        async function start() {
             try {
+                print("Завантаження Pyodide...");
                 let pyodide = await loadPyodide();
-                status.innerText = "Готуємо компоненти...";
                 
+                print("Встановлення micropip...");
                 await pyodide.loadPackage("micropip");
                 const micropip = pyodide.pyimport("micropip");
                 
-                // Встановлюємо Kivy та залежності
+                print("Встановлення Kivy (це триватиме ~30 сек)...");
                 await micropip.install("kivy");
                 
-                status.innerText = "Запуск інтерфейсу...";
+                print("Читання main.py...");
                 const response = await fetch("main.py");
+                if (!response.ok) throw new Error("Файл main.py не знайдено на сервері!");
                 const code = await response.text();
                 
-                status.style.display = 'none'; // Ховаємо текст завантаження
-                pyodide.runPython(code);
-            } catch (e) {
-                status.innerText = "Помилка завантаження. Спробуйте оновити сторінку.";
-                console.error(e);
+                print("Запуск коду...");
+                document.getElementById('canvas').style.display = 'block';
+                logElement.style.display = 'none';
+                
+                await pyodide.runPythonAsync(code);
+            } catch (err) {
+                print("\n❌ КРИТИЧНА ПОМИЛКА:\n" + err.message);
+                console.error(err);
             }
         }
-        runApp();
+        start();
     </script>
 </body>
 </html>
