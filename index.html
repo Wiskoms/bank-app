@@ -2,26 +2,32 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=360, user-scalable=no">
+    <meta name="viewport" content="width=360, user-scalable=no, viewport-fit=cover">
     <title>Мій Банк</title>
     <link rel="manifest" href="manifest.json">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <style>
         @font-face { font-family: 'Manrope'; src: url('Manrope.ttf'); }
         @font-face { font-family: 'Manrope-Bold'; src: url('Manrope-Bold.ttf'); }
 
         body, html {
-            margin: 0; padding: 0; width: 360px; height: 800px;
+            margin: 0; padding: 0; width: 360px; height: 100vh;
             background-color: black; color: white; overflow: hidden;
             font-family: 'Manrope', sans-serif;
         }
 
         .container {
-            position: relative; 
-            width: 360px; /* Фіксована ширина як у Thonny */
-            height: 800px; /* Фіксована висота як у Thonny */
+            position: absolute;
+            top: 0; /* Піднімаємо в самий верх */
+            left: 0;
+            width: 360px;
+            height: 100vh; /* Висота на весь екран телефона */
             background: url('photo.png') no-repeat;
-            background-size: 360px 800px;
+            background-size: 100% 100%; /* Фото розтягується рівно по контейнеру */
+            background-position: top center;
         }
 
         .editable { 
@@ -34,54 +40,36 @@
             white-space: nowrap;
         }
 
-        /* =========================================
-           КАРТКА ТА БАЛАНС
-           ========================================= */
+        /* --- КООРДИНАТИ (Редагуй цифри top та left) --- */
 
         /* Останні 4 цифри карти */
-        #card_digits { 
-            left: 105px; 
-            top: 282px; 
-            font-size: 14px; 
-        }
+        #card_digits { left: 105px; top: 185px; font-size: 14px; }
 
         /* Термін дії карти */
-        #card_date { 
-            left: 151px; 
-            top: 282px; 
-            font-size: 14px; 
-        }
+        #card_date { left: 151px; top: 185px; font-size: 14px; }
 
         /* Головний баланс */
         #balance {
-            left: 110px; 
-            top: 340px; 
-            font-size: 21px; 
-            width: 200px;
+            left: 110px; top: 245px; font-size: 21px; width: 200px;
             text-align: right;
         }
-        #balance span { font-size: 16px; } /* Копійки після крапки */
+        #balance span { font-size: 16px; }
 
-        /* =========================================
-           ІСТОРІЯ ТРАНЗАКЦІЙ
-           ========================================= */
+        /* ІСТОРІЯ 1 */
+        #name_1 { left: 58px; top: 460px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_1 { left: 58px; top: 478px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_1  { left: 240px; top: 460px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
 
-        /* --- ПЕРША ТРАНЗАКЦІЯ --- */
-        #name_1 { left: 58px; top: 558px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_1 { left: 58px; top: 576px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_1  { left: 240px; top: 558px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+        /* ІСТОРІЯ 2 */
+        #name_2 { left: 58px; top: 515px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_2 { left: 58px; top: 533px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_2  { left: 240px; top: 515px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
 
-        /* --- ДРУГА ТРАНЗАКЦІЯ --- */
-        #name_2 { left: 58px; top: 612px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_2 { left: 58px; top: 630px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_2  { left: 240px; top: 612px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+        /* ІСТОРІЯ 3 */
+        #name_3 { left: 58px; top: 570px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_3 { left: 58px; top: 588px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_3  { left: 240px; top: 570px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
 
-        /* --- ТРЕТЯ ТРАНЗАКЦІЯ --- */
-        #name_3 { left: 58px; top: 666px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_3 { left: 58px; top: 684px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_3  { left: 240px; top: 666px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
-
-        /* Кольори сум */
         .plus { color: #5cc033; }
         .minus { color: #ccc; }
     </style>
