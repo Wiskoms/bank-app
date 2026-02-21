@@ -2,27 +2,26 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=360, user-scalable=no">
     <title>Мій Банк</title>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         @font-face { font-family: 'Manrope'; src: url('Manrope.ttf'); }
         @font-face { font-family: 'Manrope-Bold'; src: url('Manrope-Bold.ttf'); }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 360px; height: 800px;
             background-color: black; color: white; overflow: hidden;
             font-family: 'Manrope', sans-serif;
         }
 
         .container {
             position: relative; 
-            width: 100vw; 
-            height: 100vh;
-            background: url('photo.png') no-repeat center center;
-            background-size: 100% 100%; /* Розтягуємо фон точно по екрану */
+            width: 360px; /* Фіксована ширина як у Thonny */
+            height: 800px; /* Фіксована висота як у Thonny */
+            background: url('photo.png') no-repeat;
+            background-size: 360px 800px;
         }
 
         .editable { 
@@ -35,30 +34,54 @@
             white-space: nowrap;
         }
 
-        /* --- КАРТКА (Знизу під картою) --- */
-        #card_digits { left: 30%; top: 40.5%; font-size: 13.5px; width: 50px; text-align: center; }
-        #card_date { left: 40%; top: 40.5%; font-size: 13.5px; width: 50px; text-align: center; }
+        /* =========================================
+           КАРТКА ТА БАЛАНС
+           ========================================= */
 
-        /* --- БАЛАНС --- */
-        #balance {
-            right: 12%; top: 46.8%; font-size: 21px; width: 200px;
-            text-align: right; letter-spacing: 0.3px;
+        /* Останні 4 цифри карти */
+        #card_digits { 
+            left: 105px; 
+            top: 282px; 
+            font-size: 14px; 
         }
-        #balance span { font-size: 16px; }
 
-        /* --- ІСТОРІЯ (Точна підгонка під рядки) --- */
-        .hist-item { position: absolute; width: 100%; }
-        .name { left: 16%; font-family: 'Manrope-Bold'; font-size: 12px; }
-        .date { left: 16%; font-family: 'Manrope-Bold'; font-size: 10.5px; color: #888; margin-top: 15px; }
-        .amount { right: 8%; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 100px; }
+        /* Термін дії карти */
+        #card_date { 
+            left: 151px; 
+            top: 282px; 
+            font-size: 14px; 
+        }
 
-        /* Рядок 1 (Сільпо) */
-        .row-1 { top: 69.8%; }
-        /* Рядок 2 (Богаткін) */
-        .row-2 { top: 76.5%; }
-        /* Рядок 3 (Paysend) */
-        .row-3 { top: 83.2%; }
+        /* Головний баланс */
+        #balance {
+            left: 110px; 
+            top: 340px; 
+            font-size: 21px; 
+            width: 200px;
+            text-align: right;
+        }
+        #balance span { font-size: 16px; } /* Копійки після крапки */
 
+        /* =========================================
+           ІСТОРІЯ ТРАНЗАКЦІЙ
+           ========================================= */
+
+        /* --- ПЕРША ТРАНЗАКЦІЯ --- */
+        #name_1 { left: 58px; top: 558px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_1 { left: 58px; top: 576px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_1  { left: 240px; top: 558px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+
+        /* --- ДРУГА ТРАНЗАКЦІЯ --- */
+        #name_2 { left: 58px; top: 612px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_2 { left: 58px; top: 630px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_2  { left: 240px; top: 612px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+
+        /* --- ТРЕТЯ ТРАНЗАКЦІЯ --- */
+        #name_3 { left: 58px; top: 666px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        #date_3 { left: 58px; top: 684px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
+        #sum_3  { left: 240px; top: 666px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+
+        /* Кольори сум */
         .plus { color: #5cc033; }
         .minus { color: #ccc; }
     </style>
@@ -70,23 +93,17 @@
 
         <div id="balance" class="editable" contenteditable="true">55 345<span>.50</span></div>
 
-        <div class="hist-item row-1">
-            <div class="name editable" contenteditable="true">Сільпо</div>
-            <div class="date editable" contenteditable="true">20 лютого, 23:49</div>
-            <div class="amount editable minus" contenteditable="true">- 150.00</div>
-        </div>
+        <div id="name_1" class="editable" contenteditable="true">Сільпо</div>
+        <div id="date_1" class="editable" contenteditable="true">20 лютого, 23:49</div>
+        <div id="sum_1" class="editable minus" contenteditable="true">- 150.00</div>
 
-        <div class="hist-item row-2">
-            <div class="name editable" contenteditable="true">Богаткін Д.</div>
-            <div class="date editable" contenteditable="true">20 лютого, 23:48</div>
-            <div class="amount editable plus" contenteditable="true">+ 1 200.00</div>
-        </div>
+        <div id="name_2" class="editable" contenteditable="true">Богаткін Д.</div>
+        <div id="date_2" class="editable" contenteditable="true">20 лютого, 23:48</div>
+        <div id="sum_2" class="editable plus" contenteditable="true">+ 1 200.00</div>
 
-        <div class="hist-item row-3">
-            <div class="name editable" contenteditable="true">PAYSEND</div>
-            <div class="date editable" contenteditable="true">20 лютого, 23:26</div>
-            <div class="amount editable plus" contenteditable="true">+ 2 400.00</div>
-        </div>
+        <div id="name_3" class="editable" contenteditable="true">PAYSEND</div>
+        <div id="date_3" class="editable" contenteditable="true">20 лютого, 23:26</div>
+        <div id="sum_3" class="editable plus" contenteditable="true">+ 2 400.00</div>
     </div>
 </body>
 </html>
