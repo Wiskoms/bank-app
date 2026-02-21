@@ -8,55 +8,59 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        @font-face {
-            font-family: 'Manrope';
-            src: url('Manrope.ttf');
-        }
-        @font-face {
-            font-family: 'Manrope-Bold';
-            src: url('Manrope-Bold.ttf');
-        }
+        @font-face { font-family: 'Manrope'; src: url('Manrope.ttf'); }
+        @font-face { font-family: 'Manrope-Bold'; src: url('Manrope-Bold.ttf'); }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: black; font-family: 'Manrope', sans-serif;
-            color: white; overflow: hidden;
+            background-color: black; color: white; overflow: hidden;
+            font-family: 'Manrope', sans-serif;
         }
 
         .container {
-            position: relative; width: 100vw; height: 100vh;
+            position: relative; 
+            width: 100vw; 
+            height: 100vh;
             background: url('photo.png') no-repeat center center;
-            background-size: cover;
+            background-size: 100% 100%; /* Розтягуємо фон точно по екрану */
         }
 
-        .editable { position: absolute; border: none; background: transparent; color: inherit; font-family: inherit; }
+        .editable { 
+            position: absolute; 
+            border: none; 
+            background: transparent; 
+            color: inherit; 
+            font-family: inherit; 
+            outline: none;
+            white-space: nowrap;
+        }
 
-        /* Картка */
-        #card_digits { left: 29%; top: 35.3%; font-size: 14px; width: 60px; text-align: center; }
-        #card_date { left: 42%; top: 35.3%; font-size: 14px; width: 60px; text-align: center; }
+        /* --- КАРТКА (Знизу під картою) --- */
+        #card_digits { left: 30%; top: 40.5%; font-size: 13.5px; width: 50px; text-align: center; }
+        #card_date { left: 40%; top: 40.5%; font-size: 13.5px; width: 50px; text-align: center; }
 
-        /* Баланс */
+        /* --- БАЛАНС --- */
         #balance {
-            right: 15%; top: 42.6%; font-size: 21px; width: 250px;
-            text-align: right; letter-spacing: 0.5px;
+            right: 12%; top: 46.8%; font-size: 21px; width: 200px;
+            text-align: right; letter-spacing: 0.3px;
         }
-        #balance span { font-size: 17px; }
+        #balance span { font-size: 16px; }
 
-        /* Історія загальні стилі */
-        .hist-row { position: absolute; width: 100%; left: 0; }
-        .name { left: 15%; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        .date { left: 15%; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #999; margin-top: 18px; }
-        .amount { right: 10%; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 120px; }
+        /* --- ІСТОРІЯ (Точна підгонка під рядки) --- */
+        .hist-item { position: absolute; width: 100%; }
+        .name { left: 16%; font-family: 'Manrope-Bold'; font-size: 12px; }
+        .date { left: 16%; font-family: 'Manrope-Bold'; font-size: 10.5px; color: #888; margin-top: 15px; }
+        .amount { right: 8%; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 100px; }
 
-        /* Рядок 1 */
-        .row-1 { top: 71.1%; }
-        /* Рядок 2 */
-        .row-2 { top: 77.8%; }
-        /* Рядок 3 */
-        .row-3 { top: 84.5%; }
+        /* Рядок 1 (Сільпо) */
+        .row-1 { top: 69.8%; }
+        /* Рядок 2 (Богаткін) */
+        .row-2 { top: 76.5%; }
+        /* Рядок 3 (Paysend) */
+        .row-3 { top: 83.2%; }
 
-        .plus { color: #5cc033; } /* Салатовий */
-        .minus { color: #cccccc; } /* Світло-сірий */
+        .plus { color: #5cc033; }
+        .minus { color: #ccc; }
     </style>
 </head>
 <body>
@@ -66,36 +70,23 @@
 
         <div id="balance" class="editable" contenteditable="true">55 345<span>.50</span></div>
 
-        <div class="hist-row row-1">
+        <div class="hist-item row-1">
             <div class="name editable" contenteditable="true">Сільпо</div>
             <div class="date editable" contenteditable="true">20 лютого, 23:49</div>
             <div class="amount editable minus" contenteditable="true">- 150.00</div>
         </div>
 
-        <div class="hist-row row-2">
+        <div class="hist-item row-2">
             <div class="name editable" contenteditable="true">Богаткін Д.</div>
             <div class="date editable" contenteditable="true">20 лютого, 23:48</div>
             <div class="amount editable plus" contenteditable="true">+ 1 200.00</div>
         </div>
 
-        <div class="hist-row row-3">
+        <div class="hist-item row-3">
             <div class="name editable" contenteditable="true">PAYSEND</div>
             <div class="date editable" contenteditable="true">20 лютого, 23:26</div>
             <div class="amount editable plus" contenteditable="true">+ 2 400.00</div>
         </div>
     </div>
-
-    <script>
-        // Функція для зміни кольору при редагуванні сум
-        document.querySelectorAll('.amount').forEach(el => {
-            el.addEventListener('input', function() {
-                if (this.innerText.includes('+')) {
-                    this.className = 'amount editable plus';
-                } else if (this.innerText.includes('-')) {
-                    this.className = 'amount editable minus';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
