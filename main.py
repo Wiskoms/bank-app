@@ -11,7 +11,7 @@ from kivy.properties import StringProperty
 from kivy.core.window import Window
 
 # 1. Фіксуємо розмір вікна
-Window.size = (360, 800)
+#Window.size = (360, 800)
 
 # Шляхи до твоїх шрифтів
 FONT_REGULAR = "Manrope.ttf"
@@ -162,4 +162,5 @@ class BankApp(App):
         self.popup.dismiss()
 
 if __name__ == '__main__':
+
     BankApp().run()
