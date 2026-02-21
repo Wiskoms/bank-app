@@ -1,51 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bank Debug Mode</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <title>Мій Банк</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        body { background: #000; color: #0f0; padding: 20px; font-family: monospace; font-size: 12px; }
-        #log { white-space: pre-wrap; }
+        @font-face {
+            font-family: 'Manrope';
+            src: url('Manrope.ttf');
+        }
+        @font-face {
+            font-family: 'Manrope-Bold';
+            src: url('Manrope-Bold.ttf');
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: black; font-family: 'Manrope', sans-serif;
+            color: white; overflow: hidden;
+        }
+
+        .container {
+            position: relative; width: 100vw; height: 100vh;
+            background: url('photo.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .editable { position: absolute; border: none; background: transparent; color: inherit; font-family: inherit; }
+
+        /* Картка */
+        #card_digits { left: 29%; top: 35.3%; font-size: 14px; width: 60px; text-align: center; }
+        #card_date { left: 42%; top: 35.3%; font-size: 14px; width: 60px; text-align: center; }
+
+        /* Баланс */
+        #balance {
+            right: 15%; top: 42.6%; font-size: 21px; width: 250px;
+            text-align: right; letter-spacing: 0.5px;
+        }
+        #balance span { font-size: 17px; }
+
+        /* Історія загальні стилі */
+        .hist-row { position: absolute; width: 100%; left: 0; }
+        .name { left: 15%; font-family: 'Manrope-Bold'; font-size: 12.5px; }
+        .date { left: 15%; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #999; margin-top: 18px; }
+        .amount { right: 10%; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 120px; }
+
+        /* Рядок 1 */
+        .row-1 { top: 71.1%; }
+        /* Рядок 2 */
+        .row-2 { top: 77.8%; }
+        /* Рядок 3 */
+        .row-3 { top: 84.5%; }
+
+        .plus { color: #5cc033; } /* Салатовий */
+        .minus { color: #cccccc; } /* Світло-сірий */
     </style>
 </head>
 <body>
-    <div id="log">Ініціалізація системи...</div>
-    <canvas id="canvas" style="display:none;"></canvas>
+    <div class="container">
+        <div id="card_digits" class="editable" contenteditable="true">4504</div>
+        <div id="card_date" class="editable" contenteditable="true">15/15</div>
+
+        <div id="balance" class="editable" contenteditable="true">55 345<span>.50</span></div>
+
+        <div class="hist-row row-1">
+            <div class="name editable" contenteditable="true">Сільпо</div>
+            <div class="date editable" contenteditable="true">20 лютого, 23:49</div>
+            <div class="amount editable minus" contenteditable="true">- 150.00</div>
+        </div>
+
+        <div class="hist-row row-2">
+            <div class="name editable" contenteditable="true">Богаткін Д.</div>
+            <div class="date editable" contenteditable="true">20 лютого, 23:48</div>
+            <div class="amount editable plus" contenteditable="true">+ 1 200.00</div>
+        </div>
+
+        <div class="hist-row row-3">
+            <div class="name editable" contenteditable="true">PAYSEND</div>
+            <div class="date editable" contenteditable="true">20 лютого, 23:26</div>
+            <div class="amount editable plus" contenteditable="true">+ 2 400.00</div>
+        </div>
+    </div>
 
     <script>
-        const logElement = document.getElementById('log');
-        function print(text) { logElement.innerText += "\n" + text; }
-
-        async function start() {
-            try {
-                print("Завантаження Pyodide...");
-                let pyodide = await loadPyodide();
-                
-                print("Встановлення micropip...");
-                await pyodide.loadPackage("micropip");
-                const micropip = pyodide.pyimport("micropip");
-                
-                print("Встановлення Kivy (це триватиме ~30 сек)...");
-                await micropip.install("kivy");
-                
-                print("Читання main.py...");
-                const response = await fetch("main.py");
-                if (!response.ok) throw new Error("Файл main.py не знайдено на сервері!");
-                const code = await response.text();
-                
-                print("Запуск коду...");
-                document.getElementById('canvas').style.display = 'block';
-                logElement.style.display = 'none';
-                
-                await pyodide.runPythonAsync(code);
-            } catch (err) {
-                print("\n❌ КРИТИЧНА ПОМИЛКА:\n" + err.message);
-                console.error(err);
-            }
-        }
-        start();
+        // Функція для зміни кольору при редагуванні сум
+        document.querySelectorAll('.amount').forEach(el => {
+            el.addEventListener('input', function() {
+                if (this.innerText.includes('+')) {
+                    this.className = 'amount editable plus';
+                } else if (this.innerText.includes('-')) {
+                    this.className = 'amount editable minus';
+                }
+            });
+        });
     </script>
 </body>
 </html>
