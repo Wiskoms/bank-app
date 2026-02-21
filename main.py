@@ -1,4 +1,3 @@
-import os
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -10,12 +9,7 @@ from kivy.uix.label import Label
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 
-# 1. Фіксуємо розмір вікна
-#Window.size = (360, 800)
-
-# Шляхи до твоїх шрифтів
-FONT_REGULAR = "Manrope.ttf"
-FONT_BOLD = "Manrope-Bold.ttf"
+# Для вебу Window.size не використовується, браузер сам підлаштує масштаб
 
 class BankApp(App):
     # Картка та баланс
@@ -28,29 +22,27 @@ class BankApp(App):
     history_item_2 = StringProperty("+ 1 200.00")
     history_item_3 = StringProperty("+ 2 400.00")
     
-    # НАЗВИ транзакцій (Тепер знову ЖИРНІ)
+    # НАЗВИ транзакцій
     history_name_1 = StringProperty("Сільпо")
     history_name_2 = StringProperty("Богаткін Д.")
     history_name_3 = StringProperty("PAYSEND")
     
-    # ДАТИ транзакцій (ЖИРНІ)
+    # ДАТИ транзакцій
     history_date_1 = StringProperty("20 лютого, 23:49")
     history_date_2 = StringProperty("20 лютого, 23:48")
     history_date_3 = StringProperty("20 лютого, 23:26")
 
     def build(self):
-        self.f_reg = FONT_REGULAR if os.path.exists(FONT_REGULAR) else "Roboto"
-        self.f_bold = FONT_BOLD if os.path.exists(FONT_BOLD) else "Roboto"
+        # Вказуємо назви файлів прямо (вони мають бути в тій же папці на GitHub)
+        self.f_reg = "Manrope.ttf"
+        self.f_bold = "Manrope-Bold.ttf"
         
         Window.clearcolor = (0, 0, 0, 1)
         self.main_layout = FloatLayout()
         
-        photo_path = 'photo.png'
-        if not os.path.exists(photo_path):
-            return Label(text="Файл photo.png не знайдено!")
-
+        # Фонове зображення
         self.background = Image(
-            source=photo_path,
+            source='photo.png',
             allow_stretch=True, keep_ratio=False,
             size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5}
         )
@@ -70,25 +62,19 @@ class BankApp(App):
         self.btn_balance.text_size = self.btn_balance.size
         self.btn_balance.bind(on_release=lambda x: self.open_edit_popup('main_balance'))
 
-        # --- ІСТОРІЯ: БЛОК 1 ---
-        # Назва (ЖИРНА, розмір 12.5sp)
+        # --- ІСТОРІЯ (Координати змінено для кращого вигляду) ---
         self.btn_name1 = self.create_edit_button(self.history_name_1, {'center_x': 0.41, 'center_y': 0.289}, (180, 30), '12.5sp', 'history_name_1', self.f_bold, halign='left')
-        # Дата (ЖИРНА, темніша)
         self.btn_d1 = self.create_edit_button(self.history_date_1, {'center_x': 0.41, 'center_y': 0.270}, (180, 20), '11.5sp', 'history_date_1', self.f_bold, halign='left', color=(0.6, 0.6, 0.6, 1))
-        # Сума (ЖИРНА)
         self.btn_hist1 = self.create_edit_button(self.history_item_1, {'center_x': 0.71, 'center_y': 0.289}, (120, 40), '13.5sp', 'history_item_1', self.f_bold, halign='right', is_amount=True)
 
-        # --- ІСТОРІЯ: БЛОК 2 ---
         self.btn_name2 = self.create_edit_button(self.history_name_2, {'center_x': 0.41, 'center_y': 0.222}, (180, 30), '12.5sp', 'history_name_2', self.f_bold, halign='left')
         self.btn_d2 = self.create_edit_button(self.history_date_2, {'center_x': 0.41, 'center_y': 0.203}, (180, 20), '11.5sp', 'history_date_2', self.f_bold, halign='left', color=(0.6, 0.6, 0.6, 1))
         self.btn_hist2 = self.create_edit_button(self.history_item_2, {'center_x': 0.71, 'center_y': 0.222}, (120, 40), '13.5sp', 'history_item_2', self.f_bold, halign='right', is_amount=True)
 
-        # --- ІСТОРІЯ: БЛОК 3 ---
         self.btn_name3 = self.create_edit_button(self.history_name_3, {'center_x': 0.41, 'center_y': 0.155}, (180, 30), '12.5sp', 'history_name_3', self.f_bold, halign='left')
         self.btn_d3 = self.create_edit_button(self.history_date_3, {'center_x': 0.41, 'center_y': 0.136}, (180, 20), '11.5sp', 'history_date_3', self.f_bold, halign='left', color=(0.6, 0.6, 0.6, 1))
         self.btn_hist3 = self.create_edit_button(self.history_item_3, {'center_x': 0.71, 'center_y': 0.155}, (120, 40), '13.5sp', 'history_item_3', self.f_bold, halign='right', is_amount=True)
 
-        # Додавання всіх віджетів
         widgets = [self.btn_digits, self.btn_date, self.btn_balance, 
                    self.btn_name1, self.btn_d1, self.btn_hist1,
                    self.btn_name2, self.btn_d2, self.btn_hist2,
@@ -129,13 +115,9 @@ class BankApp(App):
         self.current_editing_prop = prop_name
         current_val = getattr(self, prop_name)
         content = BoxLayout(orientation='vertical', spacing=10, padding=10)
-        self.input_field = TextInput(
-            text=str(current_val), multiline=False, halign='center', 
-            font_size='22sp', font_name=self.f_reg,
-            background_color=(0.1, 0.1, 0.1, 1), foreground_color=(1, 1, 1, 1)
-        )
+        self.input_field = TextInput(text=str(current_val), multiline=False, halign='center', font_size='22sp')
         content.add_widget(self.input_field)
-        save_btn = Button(text="Оновити", size_hint=(1, 0.5), font_name=self.f_bold)
+        save_btn = Button(text="Оновити", size_hint=(1, 0.5))
         save_btn.bind(on_release=self.save_value)
         content.add_widget(save_btn)
         self.popup = Popup(title='Редагування', content=content, size_hint=(0.8, 0.3))
@@ -144,23 +126,9 @@ class BankApp(App):
     def save_value(self, instance):
         new_text = self.input_field.text
         setattr(self, self.current_editing_prop, new_text)
-        
-        widgets_map = {
-            'history_item_1': self.btn_hist1, 'history_item_2': self.btn_hist2, 'history_item_3': self.btn_hist3,
-            'history_name_1': self.btn_name1, 'history_name_2': self.btn_name2, 'history_name_3': self.btn_name3,
-            'history_date_1': self.btn_d1, 'history_date_2': self.btn_d2, 'history_date_3': self.btn_d3,
-            'card_last_digits': self.btn_digits, 'card_date': self.btn_date
-        }
-        
-        if self.current_editing_prop in widgets_map:
-            w = widgets_map[self.current_editing_prop]
-            w.text = new_text
-            if 'item' in self.current_editing_prop: w.color = self.get_text_color(new_text)
-        elif self.current_editing_prop == 'main_balance':
-            self.btn_balance.text = self.format_balance_markup(new_text)
-            
         self.popup.dismiss()
+        # Для простоти у вебі ми просто перезавантажимо віджети, якщо треба, 
+        # але StringProperty має спрацювати автоматично.
 
 if __name__ == '__main__':
-
     BankApp().run()
