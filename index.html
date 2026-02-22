@@ -2,32 +2,28 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=360, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Мій Банк</title>
     <link rel="manifest" href="manifest.json">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <style>
         @font-face { font-family: 'Manrope'; src: url('Manrope.ttf'); }
         @font-face { font-family: 'Manrope-Bold'; src: url('Manrope-Bold.ttf'); }
 
         body, html {
-            margin: 0; padding: 0; width: 360px; height: 100vh;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: black; color: white; overflow: hidden;
             font-family: 'Manrope', sans-serif;
         }
 
         .container {
             position: absolute;
-            top: 0; /* Піднімаємо в самий верх */
-            left: 0;
-            width: 360px;
-            height: 100vh; /* Висота на весь екран телефона */
+            top: 0; left: 0;
+            width: 100vw; 
+            height: 100vh;
             background: url('photo.png') no-repeat;
-            background-size: 100% 100%; /* Фото розтягується рівно по контейнеру */
-            background-position: top center;
+            background-size: 100% 100%; /* Фото завжди на весь екран */
         }
 
         .editable { 
@@ -40,35 +36,50 @@
             white-space: nowrap;
         }
 
-        /* --- КООРДИНАТИ (Редагуй цифри top та left) --- */
+        /* =========================================
+           ЯК РУХАТИ:
+           left: 50% — це рівно посередині.
+           top: 0% — самий верх, 100% — самий низ.
+           ========================================= */
 
-        /* Останні 4 цифри карти */
-        #card_digits { left: 90px; top: 247px; font-size: 14px; }
+        /* Останні 4 цифри карти (було 105px/800px) */
+        #card_digits { 
+            left: 29.2%; 
+            top: 23.1%; 
+            font-size: 1.8vh; /* Розмір шрифту теж у % від висоти екрана */
+        }
 
         /* Термін дії карти */
-        #card_date { left: 137px; top: 247px; font-size: 14px; }
+        #card_date { 
+            left: 42%; 
+            top: 23.1%; 
+            font-size: 1.8vh; 
+        }
 
         /* Головний баланс */
         #balance {
-            left: 98px; top: 294px; font-size: 21px; width: 200px;
+            right: 12%; /* Відступ від правого краю */
+            top: 30.6%; 
+            font-size: 2.8vh; 
+            width: 60%;
             text-align: right;
         }
-        #balance span { font-size: 16px; }
+        #balance span { font-size: 2.1vh; }
 
-        /* ІСТОРІЯ 1 */
-        #name_1 { left: 65px; top: 495px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_1 { left: 65px; top: 498px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_1  { left: 225px; top: 486px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+        /* --- ІСТОРІЯ 1 --- */
+        #name_1 { left: 16.1%; top: 57.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_1 { left: 16.1%; top: 59.8%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #sum_1  { right: 10%; top: 57.5%; font-family: 'Manrope-Bold'; font-size: 1.7vh; text-align: right; width: 30%; }
 
-        /* ІСТОРІЯ 2 */
-        #name_2 { left: 65px; top: 540px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_2 { left: 65px; top: 558px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_2  { left: 225px; top: 536px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+        /* --- ІСТОРІЯ 2 --- */
+        #name_2 { left: 16.1%; top: 64.3%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_2 { left: 16.1%; top: 66.6%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #sum_2  { right: 10%; top: 64.3%; font-family: 'Manrope-Bold'; font-size: 1.7vh; text-align: right; width: 30%; }
 
-        /* ІСТОРІЯ 3 */
-        #name_3 { left: 65px; top: 595px; font-family: 'Manrope-Bold'; font-size: 12.5px; }
-        #date_3 { left: 65px; top: 613px; font-family: 'Manrope-Bold'; font-size: 11.5px; color: #888; }
-        #sum_3  { left: 225px; top: 584px; font-family: 'Manrope-Bold'; font-size: 13.5px; text-align: right; width: 80px; }
+        /* --- ІСТОРІЯ 3 --- */
+        #name_3 { left: 16.1%; top: 71.2%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_3 { left: 16.1%; top: 73.5%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #sum_3  { right: 10%; top: 71.2%; font-family: 'Manrope-Bold'; font-size: 1.7vh; text-align: right; width: 30%; }
 
         .plus { color: #5cc033; }
         .minus { color: #ccc; }
@@ -95,31 +106,3 @@
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
