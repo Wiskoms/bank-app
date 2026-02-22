@@ -18,23 +18,11 @@
         }
 
         .container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; 
-            height: 100vh;
-            background: url('photo.png') no-repeat;
-            background-size: 100% 100%;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('photo.png') no-repeat center/100% 100%;
         }
 
-        .editable { 
-            position: absolute; 
-            border: none; 
-            background: transparent; 
-            color: inherit; 
-            font-family: inherit; 
-            outline: none;
-            white-space: nowrap;
-        }
+        .editable { position: absolute; border: none; background: transparent; color: inherit; font-family: inherit; outline: none; white-space: nowrap; }
 
         /* Кольори */
         .plus { color: #5cc033 !important; }
@@ -44,50 +32,32 @@
         #card_digits { left: 24%; top: 34%; font-size: 1.8vh; }
         #card_date { left: 37%; top: 34%; font-size: 1.8vh; }
 
-        /* Головний БАЛАНС (Трохи зменшено) */
-        #balance {
-            right: 17.5%; 
-            top: 41%; 
-            font-size: 2.5vh; /* Було 2.8vh */
-            width: 60%;
-            text-align: right;
-        }
-        #balance span { font-size: 1.9vh; } /* Копійки */
+        /* Головний БАЛАНС */
+        #balance { right: 17.5%; top: 40.5%; font-size: 2.5vh; width: 60%; text-align: right; }
+        #balance span { font-size: 1.9vh; }
 
-        /* ІСТОРІЯ: Контейнер для суми та UAH */
+        /* ІСТОРІЯ: Контейнер */
         .sum-container { 
-            position: absolute; 
-            right: 15%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: flex-end; 
-            width: 40%;
+            position: absolute; right: 15%; display: flex; align-items: baseline; justify-content: flex-end; width: 45%; 
         }
 
-        /* Напис UAH в історії (Розмір тепер як у цифр) */
-        .uah { 
-            font-family: 'Manrope-Bold'; 
-            font-size: 1.7vh; /* Зробив однаковим із сумою */
-            margin-left: 5px; 
-            padding-top: 1px; /* Мікро-корекція по висоті */
-        }
+        /* Стиль для копійок в історії та UAH */
+        .small-text { font-size: 1.3vh; font-family: 'Manrope-Bold'; margin-left: 1px; }
+        .uah { margin-left: 4px; }
 
-        /* --- ІСТОРІЯ 1 --- */
+        /* Координати історії (твої) */
         #name_1 { left: 20%; top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
         #date_1 { left: 20%; top: 72%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
         .row-1 { top: 69.95%; }
 
-        /* --- ІСТОРІЯ 2 --- */
         #name_2 { left: 20%; top: 76.65%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
         #date_2 { left: 20%; top: 78.7%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
         .row-2 { top: 76.65%; }
 
-        /* --- ІСТОРІЯ 3 --- */
         #name_3 { left: 20%; top: 83.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
         #date_3 { left: 20%; top: 85.55%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
         .row-3 { top: 83.5%; }
 
-        /* Цифри суми */
         .sum-val { position: static !important; font-family: 'Manrope-Bold'; font-size: 1.7vh; }
     </style>
 </head>
@@ -95,55 +65,76 @@
     <div class="container">
         <div id="card_digits" class="editable" contenteditable="true">4504</div>
         <div id="card_date" class="editable" contenteditable="true">15/15</div>
-
         <div id="balance" class="editable" contenteditable="true">55 345<span>.50</span></div>
 
         <div id="name_1" class="editable" contenteditable="true">Сільпо</div>
         <div id="date_1" class="editable" contenteditable="true">20 лютого, 23:49</div>
-        <div class="sum-container row-1">
-            <div id="sum_1" class="editable sum-val minus" contenteditable="true">- 150.00</div>
-            <span class="uah minus">UAH</span>
+        <div class="sum-container row-1 minus">
+            <div id="sum_1" class="editable sum-val" contenteditable="true">- 150.00</div>
+            <span class="uah small-text">UAH</span>
         </div>
 
         <div id="name_2" class="editable" contenteditable="true">Богаткін Д.</div>
         <div id="date_2" class="editable" contenteditable="true">20 лютого, 23:48</div>
-        <div class="sum-container row-2">
-            <div id="sum_2" class="editable sum-val plus" contenteditable="true">+ 1 200.00</div>
-            <span class="uah plus">UAH</span>
+        <div class="sum-container row-2 plus">
+            <div id="sum_2" class="editable sum-val" contenteditable="true">+ 1 200.00</div>
+            <span class="uah small-text">UAH</span>
         </div>
 
         <div id="name_3" class="editable" contenteditable="true">PAYSEND</div>
         <div id="date_3" class="editable" contenteditable="true">20 лютого, 23:26</div>
-        <div class="sum-container row-3">
-            <div id="sum_3" class="editable sum-val plus" contenteditable="true">+ 2 400.00</div>
-            <span class="uah plus">UAH</span>
+        <div class="sum-container row-3 plus">
+            <div id="sum_3" class="editable sum-val" contenteditable="true">+ 2 400.00</div>
+            <span class="uah small-text">UAH</span>
         </div>
     </div>
 
     <script>
-        // Скрипт автоматичної зміни кольору суми та UAH
-        const sumElements = document.querySelectorAll('.sum-val');
-        
-        sumElements.forEach(el => {
-            el.addEventListener('input', function() {
-                const text = this.innerText.trim();
+        const sumInputs = document.querySelectorAll('.sum-val');
+
+        function formatSum(el) {
+            const text = el.innerText.trim();
+            const container = el.parentElement;
+            
+            // Зміна кольору всього контейнера (сума + UAH)
+            if (text.startsWith('+')) {
+                container.className = container.className.replace('minus', 'plus');
+            } else {
+                container.className = container.className.replace('plus', 'minus');
+            }
+
+            // Логіка зменшення копійок
+            if (text.includes('.')) {
+                const parts = text.split('.');
+                el.innerHTML = parts[0] + '<span class="small-text">.' + parts[1] + '</span>';
+                
+                // Ставимо курсор в кінець після оновлення HTML
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+
+        sumInputs.forEach(input => {
+            // Викликаємо один раз при завантаженні для правильного вигляду
+            formatSum(input);
+
+            input.addEventListener('input', function() {
+                const text = this.innerText;
                 const container = this.parentElement;
-                const uah = container.querySelector('.uah');
                 
                 if (text.startsWith('+')) {
-                    this.classList.remove('minus');
-                    this.classList.add('plus');
-                    uah.classList.remove('minus');
-                    uah.classList.add('plus');
+                    container.classList.remove('minus');
+                    container.classList.add('plus');
                 } else {
-                    this.classList.remove('plus');
-                    this.classList.add('minus');
-                    uah.classList.remove('plus');
-                    uah.classList.add('minus');
+                    container.classList.remove('plus');
+                    container.classList.add('minus');
                 }
             });
         });
     </script>
 </body>
 </html>
-
