@@ -42,28 +42,28 @@
         }
 
         /* --- ПЕРША ТРАНЗАКЦІЯ (ID 1) --- */
-        #img_1  { left: 4.5%; top: 68.3%; } /* Іконка 1 */
-        #name_1 { left: 20%;   top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 1 */
-        #date_1 { left: 20%;   top: 72.25%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 1 */
-        #cont_1 { right: 7.5%;  top: 69.95%; } /* Сума 1 */
+        #img_1  { left: 4.5%; top: 68.3%; }
+        #name_1 { left: 20%;   top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_1 { left: 20%;   top: 72.25%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #cont_1 { right: 7.5%;  top: 69.95%; }
 
         /* --- ДРУГА ТРАНЗАКЦІЯ (ID 2) --- */
-        #img_2  { left: 4.5%; top: 75%; } /* Іконка 2 */
-        #name_2 { left: 20%;   top: 76.65%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 2 */
-        #date_2 { left: 20%;   top: 78.95%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 2 */
-        #cont_2 { right: 7.5%;  top: 76.65%; } /* Сума 2 */
+        #img_2  { left: 4.5%; top: 75%; }
+        #name_2 { left: 20%;   top: 76.65%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_2 { left: 20%;   top: 78.95%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #cont_2 { right: 7.5%;  top: 76.65%; }
 
         /* --- ТРЕТЯ ТРАНЗАКЦІЯ (ID 3) --- */
-        #img_3  { left: 4.5%; top: 81.7%; }  /* Іконка 3 */
-        #name_3 { left: 20%;   top: 83.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 3 */
-        #date_3 { left: 20%;   top: 85.8%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 3 */
-        #cont_3 { right: 7.5%;  top: 83.5%; }  /* Сума 3 */
+        #img_3  { left: 4.5%; top: 81.7%; }
+        #name_3 { left: 20%;   top: 83.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
+        #date_3 { left: 20%;   top: 85.8%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
+        #cont_3 { right: 7.5%;  top: 83.5%; }
 
         /* --- СПІЛЬНІ СТИЛІ СУМ --- */
         .sum-container { position: absolute; display: flex; align-items: baseline; justify-content: flex-end; width: 45%; }
         .plus { color: #5cc033 !important; }
         .minus { color: #ccc !important; }
-        .small-text { font-size: 1.5vh; font-family: 'Manrope-Bold'; } /* Розмір копійок та UAH */
+        .small-text { font-size: 1.5vh; font-family: 'Manrope-Bold'; }
         .uah { margin-left: 4px; }
         .sum-val { position: static !important; font-family: 'Manrope-Bold'; font-size: 1.7vh; }
     </style>
@@ -95,8 +95,7 @@
         <div id="date_3" class="editable" contenteditable="true">20 лютого, 23:26</div>
         <div id="cont_3" class="sum-container">
             <div id="sum_3" class="editable sum-val" contenteditable="true">+ 2 400.00</div>
-            <span class="uah small-text">UAH</span>
-        </div>
+            </div>
     </div>
 
     <script>
@@ -106,7 +105,6 @@
             const id = el.id.split('_')[1];
             const img = document.getElementById('img_' + id);
 
-            // Автоматична заміна картинки та кольору залежно від знаку
             if (text.startsWith('+')) {
                 container.classList.remove('minus');
                 container.classList.add('plus');
@@ -117,7 +115,6 @@
                 img.src = 'minus.png?v=' + Date.now();
             }
 
-            // Робимо копійки маленькими автоматично
             if (text.includes('.') && !el.querySelector('.small-text')) {
                 const parts = text.split('.');
                 el.innerHTML = parts[0] + '<span class="small-text">.' + parts[1] + '</span>';
@@ -138,20 +135,3 @@
     </script>
 </body>
 </html>
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
