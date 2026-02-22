@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Мій Банк</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         @font-face { font-family: 'Manrope'; src: url('Manrope.ttf'); }
         @font-face { font-family: 'Manrope-Bold'; src: url('Manrope-Bold.ttf'); }
@@ -19,31 +22,42 @@
             background: url('photo.png') no-repeat center/100% 100%;
         }
 
-        .editable { position: absolute; border: none; background: transparent; color: inherit; font-family: inherit; outline: none; white-space: nowrap; }
+        .editable { 
+            position: absolute; border: none; background: transparent; 
+            color: inherit; font-family: inherit; outline: none; white-space: nowrap; 
+        }
 
-        /* Кольори тексту */
+        /* Кольори */
         .plus { color: #5cc033 !important; }
         .minus { color: #ccc !important; }
 
-        /* Стиль іконок */
+        /* Стиль іконок (ідеальне вирівнювання) */
         .transaction-icon {
             position: absolute;
-            left: 8%; /* Підкоригуй цей параметр, щоб іконка стала рівно на місце */
-            width: 60px; /* Розмір іконки */
-            height: 60px;
-            pointer-events: none; /* Щоб іконка не заважала натискати на текст */
+            left: 10.5%; /* Твоя позиція іконок */
+            width: 3.4vh; 
+            height: 3.4vh;
+            object-fit: contain;
+            pointer-events: none;
         }
 
-        /* Твої координати (копіюємо з твого останнього коду) */
+        /* Картка та Баланс */
         #card_digits { left: 24%; top: 34%; font-size: 1.8vh; }
         #card_date { left: 39%; top: 34%; font-size: 1.8vh; }
         #balance { right: 17.5%; top: 40.5%; font-size: 2.5vh; width: 60%; text-align: right; }
         #balance span { font-size: 1.9vh; }
 
-        .sum-container { position: absolute; right: 15%; display: flex; align-items: baseline; justify-content: flex-end; width: 45%; }
-        .small-text { font-size: 1.3vh; font-family: 'Manrope-Bold'; }
+        /* Контейнер для суми (цифри + UAH) */
+        .sum-container { 
+            position: absolute; right: 15%; display: flex; 
+            align-items: baseline; justify-content: flex-end; width: 45%; 
+        }
 
-        /* Рядки історії */
+        /* Маленький текст для копійок та UAH */
+        .small-text { font-size: 1.3vh; font-family: 'Manrope-Bold'; }
+        .uah { margin-left: 4px; }
+
+        /* Рядки історії (твої координати) */
         .row-1-pos { top: 69.95%; }
         .row-2-pos { top: 76.65%; }
         .row-3-pos { top: 83.5%; }
@@ -62,55 +76,66 @@
         <img id="img_1" src="minus.png" class="transaction-icon row-1-pos">
         <div id="name_1" class="editable name row-1-pos" contenteditable="true">Сільпо</div>
         <div id="date_1" class="editable date row-1-pos" contenteditable="true">20 лютого, 23:49</div>
-        <div id="cont_1" class="sum-container row-1-pos minus">
+        <div id="cont_1" class="sum-container row-1-pos">
             <div id="sum_1" class="editable sum-val" contenteditable="true">- 150.00</div>
-            <span class="small-text uah">UAH</span>
+            <span class="uah small-text">UAH</span>
         </div>
 
         <img id="img_2" src="plus.png" class="transaction-icon row-2-pos">
         <div id="name_2" class="editable name row-2-pos" contenteditable="true">Богаткін Д.</div>
         <div id="date_2" class="editable date row-2-pos" contenteditable="true">20 лютого, 23:48</div>
-        <div id="cont_2" class="sum-container row-2-pos plus">
+        <div id="cont_2" class="sum-container row-2-pos">
             <div id="sum_2" class="editable sum-val" contenteditable="true">+ 1 200.00</div>
-            <span class="small-text uah">UAH</span>
+            <span class="uah small-text">UAH</span>
         </div>
 
         <img id="img_3" src="plus.png" class="transaction-icon row-3-pos">
         <div id="name_3" class="editable name row-3-pos" contenteditable="true">PAYSEND</div>
         <div id="date_3" class="editable date row-3-pos" contenteditable="true">20 лютого, 23:26</div>
-        <div id="cont_3" class="sum-container row-3-pos plus">
+        <div id="cont_3" class="sum-container row-3-pos">
             <div id="sum_3" class="editable sum-val" contenteditable="true">+ 2 400.00</div>
-            <span class="small-text uah">UAH</span>
+            <span class="uah small-text">UAH</span>
         </div>
     </div>
 
     <script>
-        const sumInputs = document.querySelectorAll('.sum-val');
-
-        function updateTransaction(el) {
+        function updateRow(el) {
             const text = el.innerText.trim();
             const container = el.parentElement;
             const id = el.id.split('_')[1];
             const img = document.getElementById('img_' + id);
+            const uah = container.querySelector('.uah');
 
+            // 1. Колір та картинка
             if (text.startsWith('+')) {
                 container.classList.remove('minus');
                 container.classList.add('plus');
-                img.src = 'plus.png'; // Міняємо на зелену іконку
+                img.src = 'plus.png?v=' + Date.now();
             } else {
                 container.classList.remove('plus');
                 container.classList.add('minus');
-                img.src = 'minus.png'; // Міняємо на сіру іконку
+                img.src = 'minus.png?v=' + Date.now();
+            }
+
+            // 2. Ефект маленьких копійок
+            if (text.includes('.') && !el.querySelector('.small-text')) {
+                const parts = text.split('.');
+                el.innerHTML = parts[0] + '<span class="small-text">.' + parts[1] + '</span>';
+                
+                // Повертаємо курсор в кінець
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
             }
         }
 
-        sumInputs.forEach(input => {
-            // Перевірка при старті
-            updateTransaction(input);
-            // Слідкуємо за змінами
-            input.addEventListener('input', () => updateTransaction(input));
+        document.querySelectorAll('.sum-val').forEach(input => {
+            updateRow(input); // Ініціалізація
+            input.addEventListener('input', () => updateRow(input));
         });
     </script>
 </body>
 </html>
-
