@@ -44,17 +44,17 @@
         #card_digits { left: 24%; top: 34%; font-size: 1.8vh; }
         #card_date { left: 39%; top: 34%; font-size: 1.8vh; }
 
-        /* Баланс */
+        /* Головний БАЛАНС (Трохи зменшено) */
         #balance {
             right: 17.5%; 
             top: 40.5%; 
-            font-size: 2.8vh; 
+            font-size: 2.5vh; /* Було 2.8vh */
             width: 60%;
             text-align: right;
         }
-        #balance span { font-size: 2.1vh; }
+        #balance span { font-size: 1.9vh; } /* Копійки */
 
-        /* Стилі для рядків історії */
+        /* ІСТОРІЯ: Контейнер для суми та UAH */
         .sum-container { 
             position: absolute; 
             right: 15%; 
@@ -63,7 +63,14 @@
             justify-content: flex-end; 
             width: 40%;
         }
-        .uah { font-family: 'Manrope-Bold'; font-size: 1.2vh; margin-left: 4px; }
+
+        /* Напис UAH в історії (Розмір тепер як у цифр) */
+        .uah { 
+            font-family: 'Manrope-Bold'; 
+            font-size: 1.7vh; /* Зробив однаковим із сумою */
+            margin-left: 5px; 
+            padding-top: 1px; /* Мікро-корекція по висоті */
+        }
 
         /* --- ІСТОРІЯ 1 --- */
         #name_1 { left: 20%; top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
@@ -80,6 +87,7 @@
         #date_3 { left: 20%; top: 85.55%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
         .row-3 { top: 83.5%; }
 
+        /* Цифри суми */
         .sum-val { position: static !important; font-family: 'Manrope-Bold'; font-size: 1.7vh; }
     </style>
 </head>
@@ -113,7 +121,7 @@
     </div>
 
     <script>
-        // Скрипт автоматичної зміни кольору
+        // Скрипт автоматичної зміни кольору суми та UAH
         const sumElements = document.querySelectorAll('.sum-val');
         
         sumElements.forEach(el => {
