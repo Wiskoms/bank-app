@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    ```
-
-
-
----
-
-### Чому це важливо саме для твого проєкту:
-
-1.  **Для GitHub:** Коли автоматичні системи (сканери безпеки) бачать інтерфейс, схожий на банківський, вони можуть позначити його як «фішинг» (шахрайство). Наявність коментаря на початку — це перша лінія захисту, яка пояснює, що це **навчальний UI-проєкт**.
-2.  **Для портфоліо:** Якщо ти колись показуватимеш цей код роботодавцю, такий коментар продемонструє твою відповідальність.
-3.  **Приватність:** Ти можеш також додати там фразу про те, що додаток не передає дані на сервери, а працює лише через `localStorage`.
-
-### Порада щодо GitHub
-Якщо ти хочеш бути максимально "чистим", ти можеш також створити файл **README.md** у своєму репозиторії та написати там те саме. GitHub показує цей файл прямо під списком твоїх файлів, і це перше, що читають люди.
-
-**Бажаєш, щоб я допоміг тобі скласти текст для цього README файлу, щоб твій проєкт виглядав як професійна робота розробника?**
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Мій Банк</title>
@@ -44,49 +27,76 @@
             color: inherit; font-family: inherit; outline: none; white-space: nowrap; 
         }
 
-        /* --- КАРТКА ТА БАЛАНС --- */
-        #card_digits { left: 24%; top: 34%; font-size: 1.8vh; }
-        #card_date   { left: 37%; top: 34%; font-size: 1.8vh; }
-        #balance     { right: 17.5%; top: 41.2%; font-size: 2.1vh; width: 60%; text-align: right; }
-        #balance span { font-size: 1.9vh; }
-
-        /* --- ЗАГАЛЬНИЙ СТИЛЬ ІКОНОК --- */
-        .transaction-icon {
-            position: absolute;
-            object-fit: contain;
-            pointer-events: none;
-            width: 8vh; height: 8vh;
+        /* --- ПОПЕРЕДЖЕННЯ (MODAL) --- */
+        #warning_overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .warning-box {
+            background: #1c1c1e; padding: 25px; border-radius: 20px;
+            width: 80%; max-width: 300px; text-align: center;
+            border: 1px solid #333;
+        }
+        .warning-box h2 { font-size: 2vh; margin-bottom: 15px; color: #ff9500; }
+        .warning-box p { font-size: 1.6vh; line-height: 1.4; color: #ccc; margin-bottom: 20px; }
+        .warning-box button {
+            background: #ff9500; border: none; padding: 12px 30px;
+            color: white; border-radius: 10px; font-family: 'Manrope-Bold'; font-size: 1.6vh;
         }
 
-        /* --- ТРАНЗАКЦІЇ (Координати) --- */
-        #img_1  { left: 4%; top: 68.3%; }
-        #name_1 { left: 20%; top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
-        #date_1 { left: 20%; top: 72.25%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
-        #cont_1 { right: 7.5%; top: 69.95%; }
+        /* --- ПРОФІЛЬ --- */
+        #profile_letter { left: 8.5%; top: 5.5%; font-family: 'Manrope-Bold'; font-size: 2.2vh; color: #ff9500; width: 4vh; height: 4vh; display: flex; align-items: center; justify-content: center; } /* Буква профілю */
 
-        #img_2  { left: 4%; top: 75%; }
-        #name_2 { left: 20%; top: 76.65%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
-        #date_2 { left: 20%; top: 78.95%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
-        #cont_2 { right: 7.5%; top: 76.65%; }
+        /* --- КАРТКА ТА БАЛАНС --- */
+        #card_digits { left: 24%; top: 34%; font-size: 1.8vh; } /* Номер карти */
+        #card_date   { left: 37%; top: 34%; font-size: 1.8vh; } /* Термін дії */
+        #balance     { right: 17.5%; top: 41.2%; font-size: 2.1vh; width: 60%; text-align: right; } /* Головний баланс */
+        #balance span { font-size: 1.9vh; } /* Копійки балансу */
 
-        #img_3  { left: 4%; top: 81.7%; }
-        #name_3 { left: 20%; top: 83.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; }
-        #date_3 { left: 20%; top: 85.8%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; }
-        #cont_3 { right: 15%; top: 83.5%; }
+        /* --- ІКОНКИ ТРАНЗАКЦІЙ --- */
+        .transaction-icon { position: absolute; object-fit: contain; pointer-events: none; width: 8vh; height: 8vh; }
+        #img_1 { left: 4%; top: 68.3%; } /* Іконка 1 */
+        #img_2 { left: 4%; top: 75%; }   /* Іконка 2 */
+        #img_3 { left: 4%; top: 81.7%; } /* Іконка 3 */
+
+        /* --- ПЕРША ТРАНЗАКЦІЯ (Рядок 1) --- */
+        #name_1 { left: 20%; top: 69.95%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 1 */
+        #date_1 { left: 20%; top: 72.25%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 1 */
+        #cont_1 { right: 7.5%; top: 69.95%; } /* Контейнер суми 1 */
+
+        /* --- ДРУГА ТРАНЗАКЦІЯ (Рядок 2) --- */
+        #name_2 { left: 20%; top: 76.65%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 2 */
+        #date_2 { left: 20%; top: 78.95%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 2 */
+        #cont_2 { right: 7.5%; top: 76.65%; } /* Контейнер суми 2 */
+
+        /* --- ТРЕТЯ ТРАНЗАКЦІЯ (Рядок 3) --- */
+        #name_3 { left: 20%; top: 83.5%; font-family: 'Manrope-Bold'; font-size: 1.6vh; } /* Назва 3 */
+        #date_3 { left: 20%; top: 85.8%; font-family: 'Manrope-Bold'; font-size: 1.4vh; color: #888; } /* Дата 3 */
+        #cont_3 { right: 15%; top: 83.5%; } /* Контейнер суми 3 */
 
         /* --- СПІЛЬНІ СТИЛІ СУМ --- */
         .sum-container { position: absolute; display: flex; align-items: baseline; justify-content: flex-end; width: 45%; }
         .plus { color: #5cc033 !important; }
         .minus { color: #ccc !important; }
-        .small-text { font-size: 1.5vh; font-family: 'Manrope-Bold'; }
+        .small-text { font-size: 1.5vh; font-family: 'Manrope-Bold'; } /* Копійки та UAH */
         .uah { margin-left: 4px; }
         .sum-val { position: static !important; font-family: 'Manrope-Bold'; font-size: 1.7vh; }
-
-       
     </style>
 </head>
 <body>
+    <div id="warning_overlay">
+        <div class="warning-box">
+            <h2>УВАГА</h2>
+            <p>Цей додаток створено виключно з навчальною та розважальною метою. Він не є реальним банком.</p>
+            <button onclick="acceptWarning()">Я погоджуюсь</button>
+        </div>
+    </div>
+
     <div class="container">
+        <div id="profile_letter" class="editable" contenteditable="true">Р</div>
+
         <div id="card_digits" class="editable" contenteditable="true">4504</div>
         <div id="card_date" class="editable" contenteditable="true">15/15</div>
         <div id="balance" class="editable" contenteditable="true">55 345<span>.50</span></div>
@@ -116,7 +126,12 @@
     </div>
 
     <script>
-        // --- ПАМ'ЯТЬ (Local Storage) ---
+        // Закриття вікна попередження
+        function acceptWarning() {
+            document.getElementById('warning_overlay').style.display = 'none';
+        }
+
+        // ПАМ'ЯТЬ (Local Storage)
         function saveData() {
             const data = {};
             document.querySelectorAll('.editable').forEach(el => {
@@ -139,29 +154,24 @@
             }
         }
 
-        // --- ЛОГІКА ОНОВЛЕННЯ РЯДКА ---
+        // ЛОГІКА ОНОВЛЕННЯ (Колір, Іконки, Копійки)
         function updateRow(el, shouldSave = true) {
             const text = el.innerText.trim();
             const container = el.parentElement;
             const id = el.id.split('_')[1];
             const img = document.getElementById('img_' + id);
 
-            // Колір та іконка
             if (text.startsWith('+')) {
-                container.classList.remove('minus');
-                container.classList.add('plus');
+                container.classList.remove('minus'); container.classList.add('plus');
                 if (img) img.src = 'plus.png?v=' + Date.now();
             } else {
-                container.classList.remove('plus');
-                container.classList.add('minus');
+                container.classList.remove('plus'); container.classList.add('minus');
                 if (img) img.src = 'minus.png?v=' + Date.now();
             }
 
-            // Маленькі копійки
             if (text.includes('.') && !el.querySelector('.small-text')) {
                 const parts = text.split('.');
                 el.innerHTML = parts[0] + '<span class="small-text">.' + parts[1] + '</span>';
-                
                 const range = document.createRange();
                 const sel = window.getSelection();
                 range.selectNodeContents(el);
@@ -172,7 +182,7 @@
             if (shouldSave) saveData();
         }
 
-        // --- СЛУХАЧІ ПОДІЙ ---
+        // ЗАПУСК ПРИ ЗАВАНТАЖЕННІ
         window.addEventListener('load', loadData);
 
         document.querySelectorAll('.editable').forEach(input => {
@@ -187,6 +197,3 @@
     </script>
 </body>
 </html>
-
-
-
