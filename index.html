@@ -24,14 +24,16 @@
 
         .container {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: url('photo.png') no-repeat center/100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
         }
 
-        /* Зміни тут: додано min-width та display, щоб поле не зникало при видаленні тексту */
         .editable { 
             position: absolute; border: none; background: transparent; 
             color: inherit; font-family: inherit; outline: none; white-space: nowrap; 
-            min-width: 10px; display: inline-block;
+            min-width: 15px; min-height: 1.2em; display: inline-block;
+            -webkit-user-select: text;
         }
 
         #warning_overlay {
@@ -79,8 +81,6 @@
 
         .sum-container { position: absolute; display: flex; align-items: baseline; justify-content: flex-end; width: 45%; }
         .plus { color: #5cc033 !important; }
-        
-        /* Змінено колір з #ccc на #fff (білий) для мінусових транзакцій */
         .minus { color: #fff !important; } 
         
         .small-text { font-size: 1.5vh; font-family: 'Manrope-Bold'; }
@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <div class="container" spellcheck="false">
+    <div id="main_container" class="container" spellcheck="false">
         <div id="profile_letter" class="editable" contenteditable="true">Р</div>
 
         <div id="card_digits" class="editable" contenteditable="true">4504</div>
@@ -148,6 +148,9 @@
                 document.getElementById('warning_overlay').style.display = 'flex';
             }
 
+            // Динамічне завантаження фону з обходом кешу
+            document.getElementById('main_container').style.backgroundImage = "url('photo.png?v=" + Date.now() + "')";
+
             const saved = localStorage.getItem('bankSave');
             if (saved) {
                 const data = JSON.parse(saved);
@@ -192,6 +195,7 @@
         window.addEventListener('load', loadData);
 
         document.querySelectorAll('.editable').forEach(input => {
+            // Налаштування для кожного інпуту
             input.addEventListener('input', () => {
                 if (input.classList.contains('sum-val')) {
                     updateRow(input);
@@ -199,7 +203,25 @@
                     saveData();
                 }
             });
+
+            // Виправлення: чистий текст без великих стилів при вставці
+            input.onpaste = function(e) {
+                e.preventDefault();
+                const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                document.execCommand("insertHTML", false, text);
+            };
+
+            // Виправлення: захист від зникнення поля, якщо все стерти
+            input.onblur = function() {
+                if (this.innerText.trim() === "") {
+                    this.innerHTML = "&nbsp;";
+                    saveAll();
+                }
+            };
         });
+
+        // Заборона контекстного меню
+        window.oncontextmenu = (e) => { e.preventDefault(); return false; };
     </script>
 </body>
 </html>
